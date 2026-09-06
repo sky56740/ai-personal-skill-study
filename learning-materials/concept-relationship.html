@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN" data-page-node-id="UtSdC7iIzaym6xgygpFynN">
+<head data-page-node-id="82B75qbgbmiCQGDA9XLafC">
+<meta charset="utf-8" data-page-node-id="kh5H861MpkiUsoNcthpzXV">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="hbEwW7H6himAsYzpfHJ2zM">
+<title>Agent × 上下文 × Skill · 关系图</title>
+<style>
+  :root{
+    --bg:#f7f6f2; --panel:#ffffff; --ink:#1f2328; --muted:#57606a;
+    --line:#e6e2d8;
+    --a-agent:#1f6feb;   --a-agent-soft:#dbe7ff;
+    --a-ctx:#7a3ec1;     --a-ctx-soft:#f1e7ff;
+    --a-skill:#0f7b6c;   --a-skill-soft:#d9f1ec;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft Yahei",sans-serif}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 80px}
+  .hero{
+    background:linear-gradient(135deg,#fff,#eef3ff 30%,#f1e7ff 70%,#e7f6f3);
+    border:1px solid var(--line);border-radius:18px;padding:28px 28px 24px;
+  }
+  h1{margin:0 0 8px;font-size:30px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 14px;font-size:14px}
+  .quote{
+    border-left:3px solid #555;background:#fff;padding:14px 16px;border-radius:0 10px 10px 0;
+    font-size:15px;color:#2c3338;margin:14px 0 0;
+  }
+  section{margin-top:36px}
+  section h2{font-size:20px;margin:0 0 14px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .diagram-wrap{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;overflow:auto}
+  .mermaid{font-size:14px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .legend i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.05)}
+  table{width:100%;border-collapse:collapse;margin-top:6px;font-size:14px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:#fafafa;font-weight:600}
+  code{background:#f1efea;padding:1px 6px;border-radius:5px;font-size:13px}
+  .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 0}
+  .pill{padding:4px 10px;border-radius:999px;font-size:12px;border:1px solid var(--line)}
+  .pill.a{background:var(--a-agent-soft);color:var(--a-agent);border-color:#c5d6ff}
+  .pill.c{background:var(--a-ctx-soft);color:var(--a-ctx);border-color:#d8c5ff}
+  .pill.s{background:var(--a-skill-soft);color:var(--a-skill);border-color:#bfe5dc}
+  .grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .callout{background:#fbfaff;border:1px solid var(--line);border-left:4px solid var(--a-ctx);border-radius:8px;padding:12px 14px;margin-top:12px;font-size:14px}
+  .callout.s{border-left-color:var(--a-skill)}
+  .callout.a{border-left-color:var(--a-agent)}
+  .footer{margin-top:48px;color:var(--muted);font-size:12px;text-align:center}
+  a{color:#1f6feb}
+</style>
+</head>
+<body data-page-node-id="9ZZm5T1QNLUfxoJjiIUWGk">
+<div class="wrap" data-page-node-id="xACba5y8qVFBChF1LXw5se">
+
+  <div class="hero" data-page-node-id="zBHNAMWD5v01KEBu6SvV3X">
+    <span class="pill a" data-page-node-id="7Wv5TEAUI2RthlFv5lBTDl">Agent</span>
+    <span class="pill c" data-page-node-id="EL116GskbhZ7YRVZ3kwEIY">上下文</span>
+    <span class="pill s" data-page-node-id="hPhWCqwuDtr0mbM2VSFHr8">Skill</span>
+    <h1 data-page-node-id="5mQX7RI11QHSnCsWHByNz7">三个概念的关系图</h1>
+    <p class="sub" data-page-node-id="tp4hQ0XlSDkXK7kVtbAEqM">Agent 在上下文中读到 Skill，按 Skill 流程调用工具、产出结果。</p>
+    <div class="quote" data-page-node-id="He7u0m08Z0kkA62ZcXqplp">
+      <strong data-page-node-id="He7u0m08Z0kkA62ZcXqplp">三者之间的关系：</strong>
+      <ol data-page-node-id="He7u0m08Z0kkA62ZcXqplp" style="margin:8px 0 0;padding-left:1.4em">
+        <li data-page-node-id="He7u0m08Z0kkA62ZcXqplp"><strong data-page-node-id="He7u0m08Z0kkA62ZcXqplp">上下文是记忆基础</strong>。没有足够的上下文窗口，Agent读取不到Skill规则，记不住任务，就无法正常运行。</li>
+        <li data-page-node-id="He7u0m08Z0kkA62ZcXqplp"><strong data-page-node-id="He7u0m08Z0kkA62ZcXqplp">Agent属于执行者</strong>。依靠大模型推理，上下文保存信息，读取Skill中的流程，完成复杂任务。</li>
+        <li data-page-node-id="He7u0m08Z0kkA62ZcXqplp"><strong data-page-node-id="He7u0m08Z0kkA62ZcXqplp">Skill负责沉淀复用逻辑</strong>。将经常使用的流程固化下来，减少重复推理，输出结果更稳定。</li>
+      </ol>
+    </div>
+  </div>
+
+  <section data-page-node-id="qPzvONHJv4wV9Qsu9YaNWG">
+    <h2 data-page-node-id="geiVRxBL23hMk3WnAptGDj">1. 关系图（Mermaid）</h2>
+    <div class="diagram-wrap" data-page-node-id="AEHtKEDo5DgAZC525PJMro">
+<pre class="mermaid" data-page-node-id="pb2VhV6459MPNhiGjGWyrN">
+flowchart LR
+    subgraph Repo["仓库 .workbuddy/skills/"]
+        SK["Skill<br data-page-node-id="a7sesqw8MIMmGxO83iE8TP"/>(SKILL.md + 资源)"]
+    end
+
+    subgraph Load["加载机制"]
+        L1["1. 扫描发现"]
+        L2["2. 读 YAML 元数据"]
+        L3["3. 匹配任务描述"]
+    end
+
+    subgraph Ctx["上下文 (Context Window)"]
+        SP["System Prompt"]
+        HP["历史对话"]
+        TR["工具结果"]
+    end
+
+    subgraph Agent["Agent 执行体"]
+        Plan["规划 / 推理<br data-page-node-id="mdMXcEbc22OrgIdp87xdCX"/>(LLM 大脑)"]
+        Tool["工具 / Function Calling"]
+        Act["动作 / 副作用"]
+    end
+
+    World["真实世界<br data-page-node-id="3u4sFyPCg5AU9VHAdi0GOP"/>(文件、API、用户)"]
+
+    SK --> L1 --> L2 --> L3
+    L3 -- 注入 --> SP
+    HP --> Plan
+    TR --> Plan
+    SP --> Plan
+    Plan --> Tool --> Act
+    Act --> World
+    World -- 反馈 --> TR
+
+    classDef skill fill:#d9f1ec,stroke:#0f7b6c,color:#0f5a4f
+    classDef ctx   fill:#f1e7ff,stroke:#7a3ec1,color:#4f2879
+    classDef agent fill:#dbe7ff,stroke:#1f6feb,color:#0b4cad
+    class SK skill
+    class SP,HP,TR ctx
+    class Plan,Tool,Act agent
+</pre>
+    </div>
+    <div class="legend" data-page-node-id="VgSKkfUWdeFBjzyjWc3FNF">
+      <span data-page-node-id="yC9AXlPeWbnTOHApQlGquQ"><i style="background:var(--a-skill-soft);border-color:#0f7b6c" data-page-node-id="niMeVDHYR9jJgASVeMwgMu"></i>Skill（可复用指令）</span>
+      <span data-page-node-id="pNEBRytptVXFMMnxXECW1X"><i style="background:var(--a-ctx-soft);border-color:#7a3ec1" data-page-node-id="hzlJaZtB9dSnvWZMoiLxbp"></i>上下文（Agent 眼前的内容）</span>
+      <span data-page-node-id="257q8P9rWtaEFDBjvGKYBm"><i style="background:var(--a-agent-soft);border-color:#1f6feb" data-page-node-id="Xby5j9ppHEYesAFoBIk8TD"></i>Agent（执行体）</span>
+    </div>
+  </section>
+
+  <section data-page-node-id="iCgVPLiVqbqzRk1B4PYgTE">
+    <h2 data-page-node-id="ZsLgRaB24k4cuS1bzBE8y8">2. 一张表看清三者</h2>
+    <div class="card" data-page-node-id="XPQnMwg5BRHBMc7zs62YK6">
+      <table data-page-node-id="RDFWQKscM4Ip3b9DVME4AP">
+        <thead data-page-node-id="FPy7wMo3kMSHTDoLgLNJkJ">
+          <tr data-page-node-id="R6uHeovHpHQJ2npbP1qHNr"><th data-page-node-id="gT2JDnuaachKxhBblcR3Nj">维度</th><th data-page-node-id="HB3EUGd5Sdy2D6HGHRyFhx">Agent</th><th data-page-node-id="XOTD0ED315X9dMZBpARQid">上下文</th><th data-page-node-id="0m5atJixEBvT7KAVz1eWFt">Skill</th></tr>
+        </thead>
+        <tbody data-page-node-id="KVlrjcb6R7yzgSI2AQgFfb">
+          <tr data-page-node-id="SwYvIa0S0oFuQTrUdESTFy">
+            <td data-page-node-id="XMovo5EhyhazUtkEhRHuF5"><strong data-page-node-id="Z2m516OSEWMYPXyc2mJ4nB">本质</strong></td>
+            <td data-page-node-id="fcnkIGfxtMhYbTbzRFxrLo">目标驱动的执行体（程序系统）</td>
+            <td data-page-node-id="3n4S8NgH4V3JA8X2kz5qye">LLM 一次推理能"看到"的输入文本</td>
+            <td data-page-node-id="WBO23doXVTApl2oEFtiFzN">标准化的指令 / 工作流封装</td>
+          </tr>
+          <tr data-page-node-id="X5639VhOpZJr7EO1lwNZHn">
+            <td data-page-node-id="NUT17Las8SGECuUAIOLPVU"><strong data-page-node-id="YYRuMI6oMGLQJAKrJEbbbA">角色</strong></td>
+            <td data-page-node-id="i9QwUqAs5o9ls2EJkE7ThH">"工人"</td>
+            <td data-page-node-id="P5Hx8RMH2FAUNUVJzZVQtk">"工作台"</td>
+            <td data-page-node-id="2LfEPGpNaD566Se5bUjgHB">"工作手册"</td>
+          </tr>
+          <tr data-page-node-id="xO8YQMoAJGijMHrxDFwGhC">
+            <td data-page-node-id="y0iBZLdCK5ZqcA7kFpXu6K"><strong data-page-node-id="eglSTkuB7muklSExM0PCZ9">存放在哪里</strong></td>
+            <td data-page-node-id="DEJ9pdrdFTWDk109ePyeTg">运行时临时存在（进程级）</td>
+            <td data-page-node-id="dkxjBEmGeayhhEMMFrRjo5">随每次会话动态组装</td>
+            <td data-page-node-id="BPvGJYEYY6ieRXI1lCATV7">仓库 <code data-page-node-id="GRuF1FlXbhK2CUAP9QwMKK">.workbuddy/skills/</code> 或用户级目录</td>
+          </tr>
+          <tr data-page-node-id="RgvVhkYHew6E2Q4OAddQ9R">
+            <td data-page-node-id="LP0FOUE63wBwSpSmYLFgM8"><strong data-page-node-id="l4Dwh3JlZXri955ZHBo6lr">谁去维护</strong></td>
+            <td data-page-node-id="8JE0nhBNDAkp3eQM0WBhlh">由 system + tool + 流程决定</td>
+            <td data-page-node-id="VCOxR7GqkArlRnHamPejrd">由 Agent 每次重新组装</td>
+            <td data-page-node-id="Kv51HK2oTXhuAQwK2AmNOG">由人（或 AI 辅助）编写、版本管理</td>
+          </tr>
+          <tr data-page-node-id="tRo6F1pgWjky33BW6F8QCI">
+            <td data-page-node-id="RBHEd9wB6aBXlYBTSXGIwv"><strong data-page-node-id="OYKJqXorW7dYVektscKjCt">出问题会怎样</strong></td>
+            <td data-page-node-id="rPOOCLBBGFe7RfN9XEMLl2">动作失控 / 卡死循环</td>
+            <td data-page-node-id="rU2IHikA22Jj42gq2kxEID">信息缺失 / 截断 / 注意力偏移</td>
+            <td data-page-node-id="RxE7lzLTGWYQdNepl4BTKh">Skill 永远不会被触发 / 写错步骤</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section data-page-node-id="AdSyhjkkMAdZmhGuaoctvj">
+    <h2 data-page-node-id="cC5hbZgJluxq2mLVjhuH8G">3. 重点 ①：上下文如何影响 Agent 的工作</h2>
+    <div class="grid2" data-page-node-id="wBYx2K8xOrNV507voSsqvN">
+      <div class="callout" data-page-node-id="XwLN7RTuTv3tqg8RUA5PcA">
+        <strong data-page-node-id="3NgwiqpUUiTb5elbkxCGyN">上下文的"信息密度"决定 Agent 的判断质量</strong>。
+        把 RAG 检索结果、Skill 正文、历史对话、工具返回值都拼装得当，Agent 才能做出符合预期的决策。
+      </div>
+      <div class="callout" data-page-node-id="leFIb2PSHgHA0EVToTyEmE">
+        <strong data-page-node-id="jO8GHBidYtEaeDFxODegqF">上下文是 Agent 唯一的"记忆"</strong>。
+        LLM 没有持久记忆——想让 Agent 知道某件事，要么写进上下文，要么让它主动去查（工具 / RAG）。
+      </div>
+      <div class="callout" data-page-node-id="mtVgymMUXi71NnarJJ36fY">
+        <strong data-page-node-id="P4xEcxqx17XUOY367MNA5H">上下文是"容量受限"的工作台</strong>。
+        窗口有上限；超出后旧内容会被截断；研究中段信息最易丢失（Lost in the Middle）。
+      </div>
+      <div class="callout" data-page-node-id="TYQSLFc6YN9BT5wZd2gK7H">
+        <strong data-page-node-id="ihmJDv4Uqn5oEdgsW5vDpm">上下文决定"能做什么"</strong>，但<em data-page-node-id="7IxWN8KFM87DIxQxIiEVmO">不</em>决定"该不该做"。
+        权限、安全、合规这些是另一层（人 / 平台规则）。
+      </div>
+    </div>
+  </section>
+
+  <section data-page-node-id="eQS6upzQJHHCQG3xatnp47">
+    <h2 data-page-node-id="MnpqBj923kOsA2BHcHbVrm">4. 重点 ②：Skill 如何沉淀可复用的任务知识</h2>
+    <div class="grid2" data-page-node-id="L5W4S2aEWT77Z9yCNAUw6v">
+      <div class="callout s" data-page-node-id="WkSEcCdoXdS7ojZH4HDJ0B">
+        <strong data-page-node-id="Tl5r72N7JCt2WTHSaYPYFC">Skill 把"经验"从对话搬到仓库</strong>。
+        一段好用的提示词本来只在某个对话里用过一次；写成 Skill.md 后，下一个会话、下一台机器都能复用。
+      </div>
+      <div class="callout s" data-page-node-id="G9fMXV05M4etN9aIDudNl8">
+        <strong data-page-node-id="cKBJTqcXw9t5xSKcIUuiEC">Skill 是"被加载的模板"</strong>，不是"被调用的工具"。
+        它通过 YAML 元数据被匹配，匹配后<em data-page-node-id="MDw7RzCIQfMqZIJ2fzThPu">注入上下文</em>，再由 Agent 按里面的流程执行。
+      </div>
+      <div class="callout s" data-page-node-id="MLds50BGHdKjWkgAZ1LdSF">
+        <strong data-page-node-id="tbGGG4u1cSynYqBVgkAGT5">Skill 让"经验可版本管理"</strong>。
+        可以和仓库一起 <code data-page-node-id="7mG28mFjP3Pg5AJNOxirjo">git commit</code>、<code data-page-node-id="YrUZ6nuJmzMpjSrENCw19I">code review</code>、<code data-page-node-id="V3Q2bm92hn8SsNQc49EivN">diff</code>——比"我把这段 prompt 截图发群里"靠谱得多。
+      </div>
+      <div class="callout s" data-page-node-id="hmICEPrQo1BzWuVBO4IURz">
+        <strong data-page-node-id="dGlMGv6yICVz2EBNHYBI6r">Skill 的边界 = 它不该做"长流程编排"</strong>。
+        跨多个 Agent、跨多小时的任务更适合 Workflow；Skill 适合"在 200~600 行里说清楚一次怎么干"。
+      </div>
+    </div>
+  </section>
+
+  <section data-page-node-id="ABwiCgcJprVP0f0tV1XdmU">
+    <h2 data-page-node-id="KF1kU68Ts9LGFck9fBU7q9">5. 一个具体例子把三者串起来</h2>
+    <div class="card" data-page-node-id="RHY8uHnLhHLTwVFVcAga7q">
+      <p data-page-node-id="0PR6xooHVuhfg1TFSe4UbB">假设我说："<strong data-page-node-id="7FLPUhCNCxfSaCGJIxEQmq">用 concept-explainer 学习 RAG</strong>"，背后发生了什么：</p>
+      <ol data-page-node-id="JJs7FO5u1PfRfN0zgkNaCk">
+        <li data-page-node-id="cVJHJGy8NXNrMDzYJKmsBK"><strong data-page-node-id="eLxpDX3CXH30NOYarc6oHx">Skill 发现</strong>：WorkBuddy 扫描 <code data-page-node-id="6TiDRAZeesDeddZlEbktwy">.workbuddy/skills/</code>，发现 <code data-page-node-id="HjaXvpiBfUfSEdSlKTCkF3">concept-explainer/SKILL.md</code>。</li>
+        <li data-page-node-id="rDze1QRbOm3TA5c7Gqkem2"><strong data-page-node-id="5fUc9Tc5z7GfGz9Ymgmzt0">Skill 匹配</strong>：YAML 中 <code data-page-node-id="PD6QShB91YfeqL3bjq88qq">description</code> 含"概念学习"，命中任务。</li>
+        <li data-page-node-id="el3ZFR7opCrdY6nGnserk1"><strong data-page-node-id="hGgJxpxrWuju5ELDuL3bBc">Skill 注入上下文</strong>：把 SKILL.md 正文追加到 system prompt。</li>
+        <li data-page-node-id="uU8FwZLvIojQ2kGh8ranDv"><strong data-page-node-id="fGSoU7lLlGgOXDiePRc6Oj">Agent 推理</strong>：LLM 看到任务 + Skill 流程，决定要写 HTML。</li>
+        <li data-page-node-id="gAF9ONV4zGCNIDxOzBGUXF"><strong data-page-node-id="GnJSEoKz7NBLJ7V9ARk6Mg">Agent 调用工具</strong>：写入 <code data-page-node-id="zzO1XfE3Azzg1mv3VKtPd1">learning-materials/rag.html</code>。</li>
+        <li data-page-node-id="UkQh6EP3EGztw6ztAlvPjy"><strong data-page-node-id="N0ShANReJMpP4pxjU3hMJj">自检</strong>：按 Skill §6 自检清单逐条跑；不通过就回到步骤 4。</li>
+        <li data-page-node-id="trqJg3o7Y5IB57PbvUFJZe"><strong data-page-node-id="OgwFQtUHhm4LN5Ywp1wf76">交付</strong>：呈现给用户。</li>
+      </ol>
+      <p style="color:var(--muted);font-size:14px;margin-top:10px" data-page-node-id="DcLnJ5nXwbKUcpKCUVcoAE">
+        这整个链路里：<span class="pill s" data-page-node-id="Sx7L1DcCjF1Q7FDJ5wfsWG">Skill</span> 是流程的"标准答案"，
+        <span class="pill c" data-page-node-id="XmrjLE4yChLAi2u7YPjbXs">上下文</span> 是"标准答案 + 当前任务"的合并视图，
+        <span class="pill a" data-page-node-id="h7riccE47Gr0GWMKu02Rtb">Agent</span> 是"按这份合并视图动手干活的工人"。
+      </p>
+    </div>
+  </section>
+
+  <section data-page-node-id="4LLYATKgHCABJZvme1Wkoz">
+    <h2 data-page-node-id="AgcLraYONwfWZoJoFIL2z0">6. 我自己的判断（写给自己看的备忘）</h2>
+    <div class="card" data-page-node-id="TyRpGW2IC6PdS3mFlbWrKA">
+      <ul data-page-node-id="Y2bPNL73smsIMjRJerwYB9">
+        <li data-page-node-id="Bb8kwJoD7UByY4179Siv6t">很多人把"Skill"和"Agent"混着叫。其实 <strong data-page-node-id="XIbxuzyr6JBP5fwfGi7n3x">Skill 是被加载的，Agent 是干活的</strong>——这个先后关系不能倒。</li>
+        <li data-page-node-id="W4eZWGQbHOE57xPQuJL2Qp">"上下文工程"（Context Engineering）这个词比"Prompt 工程"更准确——因为提示词只是上下文的一部分。</li>
+        <li data-page-node-id="EwJuU5g160zb0fs2vkSQqM">Skill 写得好 ≠ Skill 写得多。控制 200~600 行、把自检写死，比堆一千行更靠谱。</li>
+        <li data-page-node-id="LEBJZVPYLG2fKxwvCqcku4">如果某个任务连"用哪份 Skill 都说不清"，那是 Skill 体系没设计好，不是用户没用对。</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="footer" data-page-node-id="QdCRBKF1v9XY8An56JXIiT">
+    关系图渲染：GitHub / VS Code / 多数 Markdown 预览支持 Mermaid，浏览器打开需联网加载
+    <code data-page-node-id="q7AP2XI5s8KPcZxQ9TMOuv">mermaid.min.js</code>。
+  </p>
+</div>
+
+<!-- 离线渲染用 Mermaid CDN；本地双击 HTML 打开会触发下载 -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  if (window.mermaid) mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
+</body>
+</html>

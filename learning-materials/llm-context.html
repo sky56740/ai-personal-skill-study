@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>大模型的上下文 学习卡片 · concept-explainer</title>
+<style>
+  :root{
+    --bg:#f7f6f2; --panel:#ffffff; --ink:#1f2328; --muted:#57606a;
+    --line:#e6e2d8; --accent:#7a3ec1; --accent-soft:#f1e7ff;
+    --warn:#b35900; --good:#1a7f37;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft Yahei",sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 20px 80px}
+  .hero{
+    background:linear-gradient(135deg,#fff,#f7efff);
+    border:1px solid var(--line);border-radius:18px;padding:28px 28px 24px;
+  }
+  .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);
+       padding:3px 10px;border-radius:999px;font-size:12px;letter-spacing:.04em;margin-bottom:12px}
+  h1{margin:0 0 8px;font-size:30px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+  .quote{
+    border-left:3px solid var(--accent);background:#fff;padding:14px 16px;border-radius:0 10px 10px 0;
+    font-size:15px;color:#2c3338;margin:14px 0 0;
+  }
+  section{margin-top:36px}
+  section h2{font-size:20px;margin:0 0 14px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .stack{counter-reset:row;display:grid;gap:10px;margin:0;padding:0;list-style:none}
+  .stack li{
+    counter-increment:row;
+    background:#fafafa;border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 50px;position:relative;
+  }
+  .stack li::before{
+    content:counter(row);position:absolute;left:14px;top:13px;
+    background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;
+  }
+  .stack li b{display:block;color:var(--accent);font-size:13px;letter-spacing:.04em;margin-bottom:4px;text-transform:uppercase}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px}
+  summary{cursor:pointer;font-weight:600}
+  details p{margin:8px 0 0;color:#2c3338}
+  ul,ol{padding-left:1.2em}
+  li{margin:6px 0}
+  code{background:#f1efea;padding:1px 6px;border-radius:5px;font-size:13px}
+  .compare{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:8px}
+  .compare .cell{padding:14px;border:1px solid var(--line);border-radius:10px;background:#fbfaff}
+  .compare .cell h4{margin:0 0 6px;color:var(--accent);font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:#f1e7ff;color:var(--accent);margin-left:6px}
+  .footer{margin-top:48px;color:var(--muted);font-size:12px;text-align:center}
+  a{color:var(--accent)}
+  a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="tag">concept-explainer</span>
+    <h1>大模型的上下文 <span class="badge">Context</span></h1>
+    <p class="sub">LLM 生成下一个 token 时，模型"眼前"所能看到的所有文字总和。</p>
+    <div class="quote">
+      我的理解：上下文就是大模型短期的记忆力。模型只能记住窗口范围之内的文字。一旦内容超出窗口，更早的信息它就看不见，直接忘掉。Agent能否正常干活，很大程度受上下文窗口的限制。
+    </div>
+  </div>
+
+  <section>
+    <h2>1. 一句话定义</h2>
+    <div class="card">
+      <p><strong>上下文（Context）</strong>是模型一次推理所能"看到"的全部输入文本，由系统提示、用户消息、历史对话、工具结果等拼装而成。</p>
+      <p>它临时存在、随会话变化；模型不会"记住"它，<em>除非你显式写回</em>。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 核心机制 / 组成</h2>
+    <ol class="stack">
+      <li><b>System Prompt</b><p>角色与规则设定。一般优先级最高，决定模型的"人设"。</p></li>
+      <li><b>User Prompt</b><p>用户当前输入的问题或指令。</p></li>
+      <li><b>对话历史</b><p>之前若干轮问答，自动续到上下文里。窗口越大，历史可保留越长。</p></li>
+      <li><b>工具结果</b><p>Function Calling / 搜索 / RAG 返回的内容，由模型主动拉进来。</p></li>
+      <li><b>长上下文（Long Context）</b><p>现代 LLM 上下文窗口可达 128K ~ 数百万 token；不是越大越好，后面会说。</p></li>
+      <li><b>上下文窗口 Context Window</b><p>模型一次性能处理的最大 token 数；超出后旧内容会被截断或压缩。</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>3. 一个具体应用场景</h2>
+    <div class="card">
+      <p><strong>任务：</strong>让模型基于一篇 30 页 PDF 回答细节问题。</p>
+      <ol>
+        <li><strong>输入</strong>：用户上传 PDF + "第 17 页第 3 段的结论是什么？"。</li>
+        <li><strong>上下文组装</strong>：系统提示（你是文档助手） + 历史对话 + PDF 全文（被切分、嵌入 user prompt）。</li>
+        <li><strong>模型推理</strong>：从上下文里定位段落 → 生成答案。</li>
+        <li><strong>输出</strong>：引用第 17 页的结论。</li>
+      </ol>
+      <p style="color:var(--muted);font-size:14px;margin-top:10px">
+        这就是 RAG 的简化原型——RAG 本质是<em>把外部信息临时塞进上下文</em>，而不是改模型参数。
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. 容易混淆的问题与使用边界</h2>
+    <div class="card">
+      <div class="compare">
+        <div class="cell"><h4>上下文 ≠ 上下文窗口</h4><p>上下文是"内容"，窗口是"容量上限"；100K 窗口可以只放 200 token 内容。</p></div>
+        <div class="cell"><h4>长上下文 ≠ 完美记忆</h4><p>研究表明模型对<em>中段</em>内容的注意力最弱（"Lost in the Middle"）。</p></div>
+        <div class="cell"><h4>上下文 ≠ 训练数据</h4><p>上下文是当次输入；训练数据是模型权重，离线学到。</p></div>
+        <div class="cell"><h4>System ≠ User Prompt</h4><p>System prompt 设定"人设"与规则，权重通常高于 user prompt。</p></div>
+      </div>
+      <ul style="margin-top:14px">
+        <li><strong>使用边界</strong>：上下文越长，单次成本越高、延迟越长，还可能稀释关键信息。</li>
+        <li><strong>隐私边界</strong>：塞进上下文的内容可能被日志/缓存记录，不传敏感信息。</li>
+        <li><strong>版本边界</strong>：上下文窗口大小随模型版本变化，老问题用新模型答案不一定一致。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. 自测问题</h2>
+    <details><summary>Q1. "上下文"和"上下文窗口"是一回事吗？</summary><p>不是。窗口是容量上限，上下文是当前塞进去的内容。</p></details>
+    <details><summary>Q2. 长上下文模型能"完美读完"一本书吗？</summary><p>不能。位置偏差（Lost in the Middle）使中段信息被忽略；仍需要 RAG / 摘要辅助。</p></details>
+    <details><summary>Q3. RAG 和"把文档塞进上下文"是什么关系？</summary><p>RAG 是"按需检索相关片段塞进上下文"的工程化做法，不是替代上下文。</p></details>
+    <details><summary>Q4. 为什么不能把密码 / API Key 直接写进 system prompt？</summary><p>上下文可能被记录、日志、缓存复盘，是高风险暴露面。</p></details>
+    <details><summary>Q5. 上下文变长后会发生什么副作用？</summary><p>成本上升、延迟变长、关键信息被淹没、还可能触发截断或注意力下降。</p></details>
+  </section>
+
+  <section>
+    <h2>6. 参考来源（可核查）</h2>
+    <div class="card">
+      <p>暂未找到权威公开链接。</p>
+    </div>
+  </section>
+
+  <p class="footer">Generated with <code>concept-explainer</code> · 经人工核查 · 仅作学习用</p>
+</div>
+</body>
+</html>

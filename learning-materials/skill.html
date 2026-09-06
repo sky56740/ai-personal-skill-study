@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN" data-page-node-id="Y1vttfTV8KBYH21HhbngbF">
+<head data-page-node-id="EjgFFbFsPEKVqBBCiLjD7G">
+<meta charset="utf-8" data-page-node-id="mNTAS0x1dHp9EbXuHZ3Lz1">
+<meta name="viewport" content="width=device-width,initial-scale=1" data-page-node-id="lxjaiNPbt2SDFp9Jhpl9AE">
+<title>Skill 学习卡片 · concept-explainer</title>
+<style>
+  :root{
+    --bg:#f7f6f2; --panel:#ffffff; --ink:#1f2328; --muted:#57606a;
+    --line:#e6e2d8; --accent:#0f7b6c; --accent-soft:#d9f1ec;
+    --warn:#b35900; --good:#1a7f37;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft Yahei",sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:32px 20px 80px}
+  .hero{
+    background:linear-gradient(135deg,#fff,#e7f6f3);
+    border:1px solid var(--line);border-radius:18px;padding:28px 28px 24px;
+  }
+  .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);
+       padding:3px 10px;border-radius:999px;font-size:12px;letter-spacing:.04em;margin-bottom:12px}
+  h1{margin:0 0 8px;font-size:30px;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+  .quote{
+    border-left:3px solid var(--accent);background:#fff;padding:14px 16px;border-radius:0 10px 10px 0;
+    font-size:15px;color:#2c3338;margin:14px 0 0;
+  }
+  section{margin-top:36px}
+  section h2{font-size:20px;margin:0 0 14px;padding-bottom:6px;border-bottom:1px dashed var(--line)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .tree{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;background:#0f1a17;color:#d6f4ee;padding:14px 16px;border-radius:10px;overflow:auto}
+  .tree .c{color:#7fc8b7}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px}
+  summary{cursor:pointer;font-weight:600}
+  details p{margin:8px 0 0;color:#2c3338}
+  ul,ol{padding-left:1.2em}
+  li{margin:6px 0}
+  code{background:#f1efea;padding:1px 6px;border-radius:5px;font-size:13px}
+  .compare{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:8px}
+  .compare .cell{padding:14px;border:1px solid var(--line);border-radius:10px;background:#f4faf8}
+  .compare .cell h4{margin:0 0 6px;color:var(--accent);font-size:14px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;background:#d9f1ec;color:var(--accent);margin-left:6px}
+  .footer{margin-top:48px;color:var(--muted);font-size:12px;text-align:center}
+  a{color:var(--accent)}
+  a:hover{text-decoration:underline}
+</style>
+</head>
+<body data-page-node-id="HNhQJh2Fcg0TLAzFpg4XGf">
+<div class="wrap" data-page-node-id="WbvmcnzaLZe2zziK6qgFnB">
+
+  <div class="hero" data-page-node-id="rX0ZbLsCfGYnkD77btD0uY">
+    <span class="tag" data-page-node-id="trw67LHpTNORHDDlhP4l8l">concept-explainer</span>
+    <h1 data-page-node-id="wUAP0JIw6Pylr4JdD8xgXb">Skill <span class="badge" data-page-node-id="GZ5IgQfpgSKO5XLiyh2Uam">可复用指令包</span></h1>
+    <p class="sub" data-page-node-id="HkBc75urFjEzSwCAY2la6N">把"在某个场景下如何做一件事"沉淀成可被 Agent 自动调用的标准化文本。</p>
+    <div class="quote" data-page-node-id="nRB50CCArAuTOvlheDpDUh">
+      我的理解：Skill相当于给Agent一份标准化工作手册。把固定步骤、输出格式、检查要求写进文件。遇到同类任务Agent直接读取手册，不用每一次重新思考怎么干活。Skill不等同一小段提示词，是完整、可以反复使用的项目文件。
+    </div>
+  </div>
+
+  <section data-page-node-id="dvlicB06bl7ZEY5XAa4cwY">
+    <h2 data-page-node-id="bYoRB2S59Dn1eqGV6EtKIJ">1. 一句话定义</h2>
+    <div class="card" data-page-node-id="yHElU4HTHS40xYbxmAfmXr">
+      <p data-page-node-id="e6ASk0UHuXdDolXu59lEqZ"><strong data-page-node-id="0YNS2ZDoVj6fvG7hqkHSMn">Skill</strong> = 一份带有 YAML 元数据 + Markdown 正文 + 可选资源的目录，
+      告诉 Agent 在何时、如何调用什么样的工作流，让"知道怎么做"这件事从对话里被搬到仓库里沉淀。</p>
+      <p data-page-node-id="95S1oB8HttRbltjbc5Bi3s">Skill 不是插件、不是工具，而是一种<em data-page-node-id="9bgOrSsR4Zrow51CEStFKy">知识与流程的封装格式</em>。</p>
+    </div>
+  </section>
+
+  <section data-page-node-id="0CJHq4cO5LCvG8aW5OdCTq">
+    <h2 data-page-node-id="xK4UdFoGpTLax0vgpbEBWN">2. 核心机制 / 组成</h2>
+    <div class="card" data-page-node-id="27ZxeDqBIviqMlmy7aIWJj">
+      <p data-page-node-id="Yv1R8ERCAswCbUxXAvljKs">一个典型的 Skill 目录长这样：</p>
+<pre class="tree" data-page-node-id="ASI4WjNHtjsjafzBmiKtnx"><span class="c" data-page-node-id="OFDzXUPKdzaCf7kTDxIFEZ">.workbuddy/skills/&lt;skill-name&gt;/</span>
+├── SKILL.md          <span class="c" data-page-node-id="Ln3mh12PfvhNefBXqCYZOQ"># YAML frontmatter + 工作流正文</span>
+├── scripts/          <span class="c" data-page-node-id="ZIAK3esZXOAy3nOsmDkcCn"># 可选：可执行脚本</span>
+├── references/       <span class="c" data-page-node-id="VTRHyg01ekzFPmNCjGIWNZ"># 可选：被正文引用的资料</span>
+└── assets/           <span class="c" data-page-node-id="0HcxG8dPKXXGk8v44DgyaH"># 可选：模板、图标等静态资源</span></pre>
+      <ul style="margin-top:12px" data-page-node-id="emZsVsLWYPdFCUBBwgoiBg">
+        <li data-page-node-id="N2KdsfQIZYloNHdwtjepVg"><strong data-page-node-id="b9TX9zKnmxtAaZc84JfvkH">YAML frontmatter</strong>：name + description + 触发条件——决定 Skill 能否被"自动"识别。</li>
+        <li data-page-node-id="slTEh0B2mycwuLfBO9bnDM"><strong data-page-node-id="NJptc2pGO03A7l2vf0kK2K">适用场景</strong>：什么时候用，什么时候不要用。</li>
+        <li data-page-node-id="gsqQIg1lryXdc5uncTUBEE"><strong data-page-node-id="zQAkv0QgF89Sr5WgkyhD71">输入信息</strong>：调用时要给什么字段，缺字段时怎么办。</li>
+        <li data-page-node-id="TwrEgzEjAYDUoN4LufDqWy"><strong data-page-node-id="UDK3gPAUr8DXx9XEEsd3i5">生成步骤</strong>：按顺序执行的工序清单。</li>
+        <li data-page-node-id="jKbMMj0oFwuy81S7gPZib8"><strong data-page-node-id="bdTgprwSSV2fpYHUhfvFNT">输出结构</strong>：固定模板，避免每次返工。</li>
+        <li data-page-node-id="Dh2j8ZmsZxOkTLzetsH1Ru"><strong data-page-node-id="Ic6GKX3e9zLQfHGL097xr8">自检要求</strong>：跑完怎么知道没出问题。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-page-node-id="QGdP88jGPA0XxBRXq0ecMY">
+    <h2 data-page-node-id="0UBkhUBIVNBzZWJHwGfPj8">3. 一个具体应用场景</h2>
+    <div class="card" data-page-node-id="jVp5rL1amexBzLbTe9kO8W">
+      <p data-page-node-id="Q1t2a06hqDXFLQW6mo6z63"><strong data-page-node-id="lbjsVRkqLzBfUksmAeD0Ra">任务：</strong>用本仓库里的 <code data-page-node-id="n4jsaG8dWyWCXV3x5lZJiR">concept-explainer</code> Skill 学习新概念。</p>
+      <ol data-page-node-id="Gb3ECJhByC0lyUVFOzTRZn">
+        <li data-page-node-id="SMWveYJFiSeDYfHoHH4SnC"><strong data-page-node-id="gpb0WUeoTC4T2CUetWIHDJ">输入</strong>：用户说"用 concept-explainer 学习 RAG"。</li>
+        <li data-page-node-id="cdtuWypgwJkH09gyMYcBsR"><strong data-page-node-id="9InkaTZblaZulRqLhyfIdS">Skill 加载</strong>：WorkBuddy 发现 <code data-page-node-id="wwzRfjEG8hIWglaTKHAqfU">.workbuddy/skills/concept-explainer/SKILL.md</code>，把 YAML 元数据纳入索引。</li>
+        <li data-page-node-id="wXcIEwlt2ldjesjcxk4zOA"><strong data-page-node-id="PQ50Kg40B8wtGuMJBGVswK">上下文注入</strong>：匹配到任务后，把 SKILL.md 的正文作为 system prompt 的一部分塞进上下文。</li>
+        <li data-page-node-id="48WFG0zL4KC7nCrdzItAnb"><strong data-page-node-id="jqk7IYLlh6HAn7IGyaWWym">流程驱动</strong>：Agent 按 SKILL.md 第 3 节列出的 10 步工序执行。</li>
+        <li data-page-node-id="Myf08VkqCUQA2gYKjh27Ab"><strong data-page-node-id="eTRqi4bHDXGu2m55D7c0gW">输出</strong>：<code data-page-node-id="e3JcpWSd8BbraO2T55NfoB">learning-materials/rag.html</code>。</li>
+        <li data-page-node-id="CueW8v06c1gHJ57EZJGudX"><strong data-page-node-id="360i2A1xtdYk5cgK0Plj28">自检</strong>：按 §6 自检清单跑一遍；不通过就回头补。</li>
+      </ol>
+    </div>
+  </section>
+
+  <section data-page-node-id="BUG6ZXB66beMp4bD1UkGus">
+    <h2 data-page-node-id="vk0IVXeoFAGFl4ibnUrRNV">4. 容易混淆的问题与使用边界</h2>
+    <div class="card" data-page-node-id="F0JH2VmW6KeilGRtLfcJU0">
+      <div class="compare" data-page-node-id="2zlPRhOEYL9nPC9jmJqhHt">
+        <div class="cell" data-page-node-id="bAL6kGE4jP06LBpEckGCAq"><h4 data-page-node-id="MJkEZu3oeuhNIAZZ1FQTZV">Skill ≠ System Prompt</h4><p data-page-node-id="chEPzEOx5ZRMubYefHdY4k">System prompt 是当下会话的"上下文"；Skill 是被加载进上下文的"模板"。</p></div>
+        <div class="cell" data-page-node-id="ZztXBzB4LQ6G5NNmDDEHTf"><h4 data-page-node-id="5I2RlgVgzeqXV30fuiBFNW">Skill ≠ Tool</h4><p data-page-node-id="8PIsznfcuqd92BjpJfZC3D">Tool 是 Agent 能<em data-page-node-id="ECCdsBxzePKIbNC42KJXzA">调用</em>的外部能力；Skill 是给 Agent <em data-page-node-id="JDC1oiG9cC0EJEafh5Pv3O">看</em>的指令。</p></div>
+        <div class="cell" data-page-node-id="49S1aCTwIXSQq1gPrkMpQv"><h4 data-page-node-id="ddwgkSmiURWCt9E82tZEL2">Skill ≠ Workflow</h4><p data-page-node-id="WmZ4vUySu7QqMMHzgV6Jv6">Workflow 强调"编排"，跨多个 Agent / 工具；Skill 强调"知识沉淀"，给单 Agent 用。</p></div>
+        <div class="cell" data-page-node-id="yLxo6liihY8kfMLoDjee2C"><h4 data-page-node-id="clduAmGH3eO5OTDHCpjlLF">Skill ≠ Plugin</h4><p data-page-node-id="6HAU7Os2WPpQnHek0XamDK">Plugin 多指外部服务/连接器；Skill 是纯本地 Markdown，无网络依赖。</p></div>
+      </div>
+      <ul style="margin-top:14px" data-page-node-id="r3ftVJDOFUYeQZWgIlI9uw">
+        <li data-page-node-id="RwWlNkEli6DCPdVLFGprWK"><strong data-page-node-id="WHt8rhGLElGoVNhux1vaxz">作用域</strong>：用户级 Skill（<code data-page-node-id="0OepDa32WE64jcRwUyvlBT">~/.workbuddy/skills/</code>）在所有项目生效；项目级 Skill（仓库内 <code data-page-node-id="LNKD9I5iTA30abwFhPJ2Fb">.workbuddy/skills/</code>）只对当前仓库生效。</li>
+        <li data-page-node-id="Lsnl8gGU8bti4lzLvXBMpv"><strong data-page-node-id="NGHmVBQqIFs8CH6tZKDoFP">使用边界</strong>：description 写不准的 Skill，永远不会被自动触发。</li>
+        <li data-page-node-id="dOBtYU9nETlXAZMFhWDYe2"><strong data-page-node-id="QjF253ZPEXAkbWmfv3Ebik">设计边界</strong>：Skill 不应承担"长流程编排"——那是 Workflow 的活；Skill 也不应改模型权重——那是 Fine-tuning。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section data-page-node-id="0OlMEIFlCEd2FbjWz5s9Vr">
+    <h2 data-page-node-id="Ms0dOCD3hXUYJwE5kOMIQA">5. 自测问题</h2>
+    <details data-page-node-id="GWEmmVOblUl7gDV8L5CIk2"><summary data-page-node-id="IbWCVZ8iqvWhKAoLGBHoC2">Q1. Skill 的 description 字段为什么重要？</summary><p data-page-node-id="sRUEgdRY2RAdqdCgKt1lDL">它是 Skill 被"自动识别"的关键：写得太宽会被乱触发，写得太窄永远不会触发。</p></details>
+    <details data-page-node-id="gULMo9qvnbyOiFP6DQBDwb"><summary data-page-node-id="1OQCBdLDWtjVigET9uORXH">Q2. 项目级 Skill 和用户级 Skill 的区别？</summary><p data-page-node-id="2CjVPCmh0CQXmSvyOQHNJj">项目级只对当前仓库生效、可随仓库共享；用户级在所有项目都生效、只在本机。</p></details>
+    <details data-page-node-id="Xc5mOfUJnWouiIKpgXyktY"><summary data-page-node-id="T8OfsoX4tXFgijwixeMpt5">Q3. Skill 能不能包含 Python 脚本？</summary><p data-page-node-id="07z4cwNVETJXFEkZpYdMkA">可以放在 <code data-page-node-id="RylMkBsW8QPyANorJ6k9Ma">scripts/</code>，但要明确用途；不要让脚本副作用过大，否则每次触发都跑一遍。</p></details>
+    <details data-page-node-id="hzl7KodpBszRPo5RfiUhvu"><summary data-page-node-id="1lETtwq98NhXDIXtYKIEEj">Q4. 一个 Skill 写多大合适？</summary><p data-page-node-id="xchY77cOOn3DvycAz7UNC0">正文建议控制在 200~600 行；过长会让上下文被 Skill 自身占满，反而挤压任务内容。</p></details>
+    <details data-page-node-id="y8ElcQobjcfkX5OAjTg09t"><summary data-page-node-id="MjddBCAkd8RxdZEsLKX0vi">Q5. Skill 适合做"对比两个概念"吗？</summary><p data-page-node-id="cL5InHHNr2uA0KfVPSckF8">勉强可以，但更适合另起一个 <code data-page-node-id="jiVs6oQ95PtUHLT3IDm8G0">concept-vs</code> Skill，避免把 comparison 写进通用 explainer。</p></details>
+  </section>
+
+  <section data-page-node-id="QIXMkCAobBFcndMGa1hm3A">
+    <h2 data-page-node-id="hBGx6nChg1qK3OkNeGCZwS">6. 参考来源（可核查）</h2>
+    <div class="card" data-page-node-id="ol3rGRJKHZ3x9rcpALvLCW">
+      <p data-page-node-id="CVezv1LuhpungpWSHzXFsG">暂未找到权威公开链接。</p>
+    </div>
+  </section>
+
+  <p class="footer" data-page-node-id="5deBDoQPjmBPHWQR7o2ZgJ">Generated with <code data-page-node-id="my24oxxlziVdyE84G5DaxO">concept-explainer</code> · 经人工核查 · 仅作学习用</p>
+</div>
+</body>
+</html>
